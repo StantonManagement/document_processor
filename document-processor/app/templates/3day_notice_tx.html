@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three-Day Notice to Vacate - Texas</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 1in;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #000;
+        }
+        .header {
+            text-align: center;
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        .amount {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #c00;
+        }
+        .legal-reference {
+            margin-top: 30px;
+            font-size: 10pt;
+            font-style: italic;
+            color: #666;
+        }
+        .signature-section {
+            margin-top: 60px;
+        }
+        .signature-line {
+            margin-top: 50px;
+            border-top: 1px solid #000;
+            width: 300px;
+            padding-top: 5px;
+        }
+        .notice-box {
+            border: 2px solid #000;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Notice to Vacate
+    </div>
+    
+    <div class="content">
+        <p><strong>Date:</strong> {{ current_date|date }}</p>
+        
+        <p><strong>To:</strong> {{ tenant_name }}<br>
+        <strong>Property Address:</strong> {{ property_address }}<br>
+        <strong>Unit:</strong> {{ unit_name }}</p>
+        
+        <div class="notice-box">
+            <p>You are hereby notified that you are in default under your lease agreement. 
+            You currently owe <span class="amount">{{ amount_owed|currency }}</span> for rent 
+            and charges for the period from {{ delinquent_from|date }} 
+            through {{ current_date|date }}.</p>
+            
+            {% if tenant_portion %}
+            <p><strong>Your tenant portion due is:</strong> <span class="amount">{{ tenant_portion|currency }}</span></p>
+            {% endif %}
+        </div>
+        
+        <p><strong>NOTICE OF RIGHT TO CURE:</strong></p>
+        <p>You have the right to cure this default by paying the full amount owed within 
+        <strong>THREE (3) DAYS</strong> from the date you receive this notice.</p>
+        
+        <p><strong>Payment Deadline:</strong> {{ payment_deadline|date }}</p>
+        
+        {% if payment_instructions %}
+        <p><strong>Payment Instructions:</strong><br>
+        {{ payment_instructions }}</p>
+        {% endif %}
+        
+        <p>If you fail to pay the amount owed by the deadline stated above, you must vacate 
+        the premises. If you do not vacate, the landlord may file an eviction lawsuit against you.</p>
+        
+        <div class="notice-box">
+            <p><strong>DELIVERY METHODS:</strong></p>
+            <p>This notice may be delivered by:</p>
+            <ul>
+                <li>Hand delivery to you personally</li>
+                <li>Certified mail, return receipt requested</li>
+                <li>Posting on the inside of the main entry door of the premises (if other methods fail)</li>
+            </ul>
+        </div>
+        
+        <div class="legal-reference">
+            <p><strong>Legal Reference:</strong> Texas Property Code § 24.005</p>
+            <p>This notice is given pursuant to Texas Property Code.</p>
+            <p><strong>Note:</strong> This notice does not terminate your lease. It is a demand for 
+            payment or possession of the premises.</p>
+        </div>
+        
+        <div class="signature-section">
+            <p><strong>Landlord/Property Manager Information:</strong></p>
+            {% if manager_name %}
+            <p>{{ manager_name }}<br>
+            {% if manager_phone %}Phone: {{ manager_phone|phone }}<br>{% endif %}
+            {% if manager_email %}Email: {{ manager_email }}{% endif %}</p>
+            {% endif %}
+            
+            <div class="signature-line">
+                Signature of Landlord/Agent
+            </div>
+            
+            <div class="signature-line">
+                Date
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 10pt;">
+            <strong>Certificate of Service:</strong><br>
+            I certify that this notice was delivered on {{ current_date|date }} by:
+            ☐ Hand Delivery ☐ Certified Mail ☐ Posting
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+

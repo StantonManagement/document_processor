@@ -1,6 +1,17 @@
-Document Processing Service (FastAPI)
+# Document Processing & Generation Service
 
-Quick Start (local)
+A FastAPI-based service for processing documents (PDFs, images, DOCX) with OCR capabilities, text extraction, intelligent parsing, and template-based document generation.
+
+## 📚 Documentation
+
+- **[API Documentation](docs/API_DOCUMENTATION.md)** - Complete API reference with examples
+- **[Quick Start Guide](docs/QUICK_START.md)** - Get started quickly
+- **[Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md)** - Detailed implementation overview
+- **[Compliance Checklist](docs/COMPLIANCE_CHECKLIST.md)** - Specification compliance verification
+
+---
+
+## Quick Start (local)
 
 1. Prerequisites
 

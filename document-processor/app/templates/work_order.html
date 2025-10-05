@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Order</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 0.75in;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #000;
+        }
+        .header {
+            text-align: center;
+            font-size: 18pt;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 3px solid #333;
+            padding-bottom: 10px;
+        }
+        .wo-number {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 12pt;
+            margin-bottom: 10px;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        .info-grid {
+            display: table;
+            width: 100%;
+        }
+        .info-row {
+            display: table-row;
+        }
+        .info-label {
+            display: table-cell;
+            font-weight: bold;
+            width: 150px;
+            padding: 5px 10px 5px 0;
+        }
+        .info-value {
+            display: table-cell;
+            padding: 5px 0;
+        }
+        .priority-high {
+            color: #c00;
+            font-weight: bold;
+        }
+        .priority-medium {
+            color: #f90;
+            font-weight: bold;
+        }
+        .priority-low {
+            color: #090;
+            font-weight: bold;
+        }
+        .description-box {
+            border: 1px solid #999;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 100px;
+            background-color: #fff;
+        }
+        .signature-section {
+            margin-top: 40px;
+            page-break-inside: avoid;
+        }
+        .signature-box {
+            display: inline-block;
+            width: 45%;
+            margin: 10px 2%;
+            vertical-align: top;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 40px;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Work Order
+    </div>
+    
+    <div class="wo-number">
+        WO #{{ work_order_number }}
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Property Information</div>
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Property:</div>
+                <div class="info-value">{{ property_name }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Address:</div>
+                <div class="info-value">{{ property_address }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Unit:</div>
+                <div class="info-value">{{ unit_name }}</div>
+            </div>
+            {% if tenant_name %}
+            <div class="info-row">
+                <div class="info-label">Tenant:</div>
+                <div class="info-value">{{ tenant_name }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Work Order Details</div>
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Date Created:</div>
+                <div class="info-value">{{ current_date|date }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Priority:</div>
+                <div class="info-value">
+                    {% if priority == 'high' %}
+                    <span class="priority-high">HIGH - URGENT</span>
+                    {% elif priority == 'medium' %}
+                    <span class="priority-medium">MEDIUM</span>
+                    {% else %}
+                    <span class="priority-low">LOW - ROUTINE</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% if category %}
+            <div class="info-row">
+                <div class="info-label">Category:</div>
+                <div class="info-value">{{ category }}</div>
+            </div>
+            {% endif %}
+            {% if requested_by %}
+            <div class="info-row">
+                <div class="info-label">Requested By:</div>
+                <div class="info-value">{{ requested_by }}</div>
+            </div>
+            {% endif %}
+            {% if due_date %}
+            <div class="info-row">
+                <div class="info-label">Due Date:</div>
+                <div class="info-value">{{ due_date|date }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">Issue Description</div>
+        <div class="description-box">
+            {{ issue_description }}
+        </div>
+    </div>
+    
+    {% if assigned_to %}
+    <div class="section">
+        <div class="section-title">Assignment</div>
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Assigned To:</div>
+                <div class="info-value">{{ assigned_to }}</div>
+            </div>
+            {% if vendor_phone %}
+            <div class="info-row">
+                <div class="info-label">Phone:</div>
+                <div class="info-value">{{ vendor_phone|phone }}</div>
+            </div>
+            {% endif %}
+            {% if vendor_email %}
+            <div class="info-row">
+                <div class="info-label">Email:</div>
+                <div class="info-value">{{ vendor_email }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="section">
+        <div class="section-title">Work Performed / Notes</div>
+        <div class="description-box" style="min-height: 150px;">
+            {% if work_notes %}{{ work_notes }}{% endif %}
+        </div>
+    </div>
+    
+    {% if estimated_cost %}
+    <div class="section">
+        <div class="section-title">Cost Information</div>
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Estimated Cost:</div>
+                <div class="info-value">{{ estimated_cost|currency }}</div>
+            </div>
+            {% if actual_cost %}
+            <div class="info-row">
+                <div class="info-label">Actual Cost:</div>
+                <div class="info-value">{{ actual_cost|currency }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="signature-section">
+        <div class="signature-box">
+            <strong>Technician/Vendor</strong>
+            <div class="signature-line">
+                Signature
+            </div>
+            <div class="signature-line">
+                Date
+            </div>
+        </div>
+        
+        <div class="signature-box">
+            <strong>Property Manager</strong>
+            <div class="signature-line">
+                Signature
+            </div>
+            <div class="signature-line">
+                Date
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

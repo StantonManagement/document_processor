@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Plan Agreement</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 1in;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #000;
+        }
+        .header {
+            text-align: center;
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        .amount {
+            font-weight: bold;
+            color: #000;
+        }
+        .section {
+            margin: 20px 0;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 12pt;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+        .signature-section {
+            margin-top: 50px;
+            page-break-inside: avoid;
+        }
+        .signature-box {
+            margin: 30px 0;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 300px;
+            margin-top: 40px;
+            padding-top: 5px;
+        }
+        .terms-box {
+            border: 2px solid #333;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Payment Plan Agreement
+    </div>
+    
+    <div class="content">
+        <p><strong>Date:</strong> {{ current_date|date }}</p>
+        
+        <div class="section">
+            <div class="section-title">Parties</div>
+            <p><strong>Landlord/Property Manager:</strong> {{ manager_name }}<br>
+            {% if manager_address %}{{ manager_address }}<br>{% endif %}
+            {% if manager_phone %}Phone: {{ manager_phone|phone }}<br>{% endif %}
+            {% if manager_email %}Email: {{ manager_email }}{% endif %}</p>
+            
+            <p><strong>Tenant:</strong> {{ tenant_name }}<br>
+            <strong>Property Address:</strong> {{ property_address }}<br>
+            <strong>Unit:</strong> {{ unit_name }}</p>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Outstanding Balance</div>
+            <p>The Tenant acknowledges owing the following amount to the Landlord:</p>
+            <p><strong>Total Amount Owed:</strong> <span class="amount">{{ total_amount_owed|currency }}</span></p>
+            <p>For the period: {{ delinquent_from|date }} through {{ current_date|date }}</p>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Payment Plan Terms</div>
+            <p>The Tenant agrees to pay the outstanding balance according to the following schedule:</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Payment #</th>
+                        <th>Due Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payment_schedule %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ payment.due_date|date }}</td>
+                        <td>{{ payment.amount|currency }}</td>
+                        <td>{{ payment.status|default('Pending') }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="total-row">
+                        <td colspan="2"><strong>Total</strong></td>
+                        <td><strong>{{ total_amount_owed|currency }}</strong></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            {% if down_payment %}
+            <p><strong>Down Payment:</strong> {{ down_payment|currency }} due immediately upon signing this agreement.</p>
+            {% endif %}
+        </div>
+        
+        <div class="terms-box">
+            <div class="section-title">Terms and Conditions</div>
+            <ul>
+                <li>All payments must be made on or before the due date specified in the payment schedule.</li>
+                <li>Payments should be made to: {{ payment_instructions|default('Same as regular rent payment') }}</li>
+                <li>Late payments may result in late fees as specified in the lease agreement.</li>
+                <li>Failure to make any scheduled payment may result in immediate termination of this agreement 
+                    and commencement of eviction proceedings.</li>
+                <li>This payment plan does not waive any other terms of the lease agreement.</li>
+                <li>The Tenant must continue to pay current rent in addition to the payment plan installments.</li>
+                {% if additional_terms %}
+                <li>{{ additional_terms }}</li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Default</div>
+            <p>If the Tenant fails to make any payment as scheduled, the entire remaining balance 
+            shall become immediately due and payable. The Landlord may then pursue all legal remedies 
+            available, including eviction proceedings.</p>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Current Rent</div>
+            <p>The Tenant acknowledges that current rent of <strong>{{ monthly_rent|currency }}</strong> 
+            per month must continue to be paid on time in addition to the payment plan installments.</p>
+        </div>
+        
+        <div class="signature-section">
+            <p>By signing below, both parties agree to the terms of this Payment Plan Agreement.</p>
+            
+            <div class="signature-box">
+                <strong>Tenant</strong>
+                <div class="signature-line">
+                    {{ tenant_name }}
+                </div>
+                <div class="signature-line">
+                    Date
+                </div>
+            </div>
+            
+            <div class="signature-box">
+                <strong>Landlord/Property Manager</strong>
+                <div class="signature-line">
+                    {{ manager_name }}
+                </div>
+                <div class="signature-line">
+                    Date
+                </div>
+            </div>
+        </div>
+        
+        <p style="margin-top: 30px; font-size: 9pt; font-style: italic;">
+        This agreement is legally binding. Both parties should retain a copy for their records.
+        </p>
+    </div>
+</body>
+</html>
+

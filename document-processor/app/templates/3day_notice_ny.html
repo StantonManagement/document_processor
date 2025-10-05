@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourteen-Day Notice to Pay Rent - New York</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 1in;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #000;
+        }
+        .header {
+            text-align: center;
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        .amount {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #c00;
+        }
+        .legal-reference {
+            margin-top: 30px;
+            font-size: 10pt;
+            font-style: italic;
+            color: #666;
+        }
+        .signature-section {
+            margin-top: 60px;
+        }
+        .signature-line {
+            margin-top: 50px;
+            border-top: 1px solid #000;
+            width: 300px;
+            padding-top: 5px;
+        }
+        .notice-box {
+            border: 2px solid #000;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+        .court-info {
+            border: 1px solid #666;
+            padding: 10px;
+            margin: 15px 0;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Fourteen-Day Notice to Pay Rent
+    </div>
+    
+    <div class="content">
+        <p><strong>Date:</strong> {{ current_date|date }}</p>
+        
+        <p><strong>To:</strong> {{ tenant_name }}<br>
+        <strong>Property Address:</strong> {{ property_address }}<br>
+        <strong>Unit:</strong> {{ unit_name }}</p>
+        
+        <div class="notice-box">
+            <p>PLEASE TAKE NOTICE that you are indebted to the undersigned in the sum of 
+            <span class="amount">{{ amount_owed|currency }}</span> for rent and charges 
+            now due and owing for the period from {{ delinquent_from|date }} 
+            through {{ current_date|date }}.</p>
+            
+            {% if tenant_portion %}
+            <p><strong>Your tenant portion due is:</strong> <span class="amount">{{ tenant_portion|currency }}</span></p>
+            {% endif %}
+        </div>
+        
+        <p>You are required to pay said sum within <strong>FOURTEEN (14) DAYS</strong> from the date 
+        of service of this notice.</p>
+        
+        <p><strong>Payment Deadline:</strong> {{ payment_deadline|date }}</p>
+        
+        {% if payment_instructions %}
+        <p><strong>Payment Instructions:</strong><br>
+        {{ payment_instructions }}</p>
+        {% endif %}
+        
+        <p>If you fail to pay the rent due within fourteen (14) days after service of this notice, 
+        the landlord may commence a proceeding against you in Housing Court to evict you and 
+        to recover the rent due.</p>
+        
+        <div class="court-info">
+            <p><strong>Court Information:</strong></p>
+            {% if court_name %}
+            <p>{{ court_name }}<br>
+            {% if court_address %}{{ court_address }}<br>{% endif %}
+            {% if court_phone %}Phone: {{ court_phone }}{% endif %}</p>
+            {% else %}
+            <p>If legal proceedings are commenced, you will be notified of the court location and hearing date.</p>
+            {% endif %}
+        </div>
+        
+        <div class="notice-box">
+            <p><strong>IMPORTANT NOTICE:</strong></p>
+            <p>You have the right to legal representation. If you cannot afford an attorney, 
+            you may be eligible for free legal services. Contact your local legal aid office 
+            or call the New York State Court Help Center at 1-800-COURTNY (1-800-268-7869).</p>
+        </div>
+        
+        <div class="legal-reference">
+            <p><strong>Legal Reference:</strong> NY Real Property Law § 711</p>
+            <p>This notice is given pursuant to New York Real Property Law.</p>
+            <p><strong>Service Method:</strong> This notice must be served by certified mail or personal delivery.</p>
+        </div>
+        
+        <div class="signature-section">
+            <p><strong>Landlord/Property Manager Information:</strong></p>
+            {% if manager_name %}
+            <p>{{ manager_name }}<br>
+            {% if manager_phone %}Phone: {{ manager_phone|phone }}<br>{% endif %}
+            {% if manager_email %}Email: {{ manager_email }}{% endif %}</p>
+            {% endif %}
+            
+            <div class="signature-line">
+                Signature of Landlord/Agent
+            </div>
+            
+            <div class="signature-line">
+                Date
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

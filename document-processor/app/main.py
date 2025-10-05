@@ -8,8 +8,13 @@ from typing import Dict
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from .api.compliance_routes import router as compliance_router
 from .api.dependencies import get_queue_service
+from .api.generation_routes import router as generation_router
+from .api.integration_routes import router as integration_router
 from .api.routes import router
+from .api.signature_routes import router as signature_router
+from .api.template_routes import router as template_router
 
 
 class RateLimiter:
@@ -135,3 +140,8 @@ async def health():
 
 
 app.include_router(router)
+app.include_router(template_router)
+app.include_router(generation_router)
+app.include_router(signature_router)
+app.include_router(integration_router)
+app.include_router(compliance_router)
